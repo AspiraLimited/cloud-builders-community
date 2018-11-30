@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -e
 
 # If there is no current context, get one.
 if [[ $(kubectl config current-context 2> /dev/null) == "" ]]; then
@@ -26,9 +28,16 @@ EOF
       gcloud config set container/use_v1_api_client false
       echo "Running: gcloud beta container clusters get-credentials --project=\"$project\" --region=\"$region\" \"$cluster\""
       gcloud beta container clusters get-credentials --project="$project" --region="$region" "$cluster" || exit
+      eval "$(gcloud beta container clusters describe --project="$project" --region="$region" "$cluster" --format="config[export](privateClusterConfig)")"
     else
       echo "Running: gcloud container clusters get-credentials --project=\"$project\" --zone=\"$zone\" \"$cluster\""
       gcloud container clusters get-credentials --project="$project" --zone="$zone" "$cluster" || exit
+      eval "$(gcloud container clusters describe --project="$project" --zone="$zone" "$cluster" --format="config[export](privateClusterConfig)")"
+    fi
+
+    # replace private cluster endpoint with public
+    if [ -n "$privateClusterConfig_publicEndpoint" ]; then
+      sed -i "s,https://$privateClusterConfig_privateEndpoint$,https://$privateClusterConfig_publicEndpoint,g" ~/.kube/config
     fi
 fi
 

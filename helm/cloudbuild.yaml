@@ -1,5 +1,14 @@
+---
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '--tag=gcr.io/$PROJECT_ID/helm', '--build-arg', 'HELM_VERSION=v2.10.0', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - --tag=gcr.io/$PROJECT_ID/helm
+      - --tag=eu.gcr.io/$PROJECT_ID/helm
+      - --build-arg
+      - HELM_VERSION=v2.11.0
+      - '.'
 
-images: ['gcr.io/$PROJECT_ID/helm']
+images:
+  - eu.gcr.io/$PROJECT_ID/helm
+  - gcr.io/$PROJECT_ID/helm
