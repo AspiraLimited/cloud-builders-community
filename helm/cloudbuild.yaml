@@ -6,7 +6,7 @@ steps:
       - --tag=gcr.io/$PROJECT_ID/helm
       - --tag=eu.gcr.io/$PROJECT_ID/helm
       - --build-arg
-      - HELM_VERSION=v2.11.0
+      - HELM_VERSION=v2.12.0
       - '.'
 
 images:
