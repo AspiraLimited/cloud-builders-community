@@ -1,0 +1,17 @@
+---
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - --tag=gcr.io/$PROJECT_ID/werf
+      - --tag=eu.gcr.io/$PROJECT_ID/werf
+      - --build-arg
+      - HELM_VERSION=v2.16.0
+      - --build-arg
+      - WERF_VERSION=v1.0.4-beta.9
+      - '.'
+
+images:
+  - eu.gcr.io/$PROJECT_ID/werf
+  - gcr.io/$PROJECT_ID/werf
+tags: ['cloud-builders-community']
